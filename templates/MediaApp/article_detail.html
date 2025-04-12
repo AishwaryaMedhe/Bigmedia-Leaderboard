@@ -1,0 +1,23 @@
+{% extends "MediaApp/base.html" %}
+
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block content %}
+    <div class="header-actions">
+        <h2>{{ article.title }}</h2>
+        <div>
+            <a href="{% url 'article_update' article.id %}" class="btn">Edit</a>
+            <a href="{% url 'article_delete' article.id %}" class="btn btn-danger delete-btn">Delete</a>
+        </div>
+    </div>
+
+    <div class="detail-view">
+        <p><strong>URL:</strong> <a href="{{ article.url }}" target="_blank">{{ article.url }}</a></p>
+        <p><strong>Outlet:</strong> <a href="{% url 'media_outlet_detail' article.outlet.id %}">{{ article.outlet.name }}</a></p>
+        <p><strong>Shares:</strong> {{ article.shares }}</p>
+        <p><strong>Views:</strong> {{ article.views }}</p>
+        <p><strong>Created:</strong> {{ article.created_at }}</p>
+    </div>
+
+    <a href="{% url 'article_list' %}" class="btn">Back to List</a>
+{% endblock %}

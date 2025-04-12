@@ -1,0 +1,65 @@
+{% extends "MediaApp/base.html" %}
+
+{% block title %}Articles{% endblock %}
+
+{% block content %}
+    <div class="header-actions">
+        <h2>Articles</h2>
+        <a href="{% url 'article_create' %}" class="btn">Add New Article</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Outlet</th>
+                <th>Shares</th>
+                <th>Views</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for article in articles %}
+            <tr>
+                <td>{{ article.title }}</td>
+                <td>{{ article.outlet.name }}</td>
+                <td>{{ article.shares }}</td>
+                <td>{{ article.views }}</td>
+                <td>{{ article.created_at|date:"M d, Y" }}</td>
+                <td class="action-links">
+                    <a href="{% url 'article_detail' article.id %}" class="btn">View</a>
+                    <a href="{% url 'article_update' article.id %}" class="btn">Edit</a>
+                    <a href="{% url 'article_delete' article.id %}" class="btn btn-danger delete-btn">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">No articles found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if is_paginated %}
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+            <li><a href="?page=1">&laquo; First</a></li>
+            <li><a href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <li class="active"><a href="?page={{ num }}">{{ num }}</a></li>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li><a href="?page={{ num }}">{{ num }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <li><a href="?page={{ page_obj.next_page_number }}">Next</a></li>
+            <li><a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a></li>
+        {% endif %}
+    </ul>
+    {% endif %}
+{% endblock %}

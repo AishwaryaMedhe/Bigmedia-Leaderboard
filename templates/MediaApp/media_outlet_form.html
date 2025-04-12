@@ -1,0 +1,25 @@
+<!-- Media Outlet Create/Update Form (media_outlet_form.html) -->
+{% extends "MediaApp/base.html" %}
+
+{% block title %}{% if outlet.id %}Edit {{ outlet.name }}{% else %}Add Media Outlet{% endif %}{% endblock %}
+
+{% block content %}
+    <h2>{% if outlet.id %}Edit {{ outlet.name }}{% else %}Add New Media Outlet{% endif %}</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="id_name">Name</label>
+            <input type="text" id="id_name" name="name" value="{{ outlet.name|default:'' }}" required maxlength="400">
+        </div>
+
+        <div class="form-group">
+            <label for="id_score">Score</label>
+            <input type="number" id="id_score" name="score" value="{{ outlet.score|default:0 }}">
+        </div>
+
+        <button type="submit">{% if outlet.id %}Update{% else %}Create{% endif %}</button>
+        <a href="{% url 'media_outlet_list' %}" class="btn">Cancel</a>
+    </form>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "MediaApp/base.html" %}
+
+{% block title %}Media Outlets{% endblock %}
+
+{% block content %}
+    <div class="header-actions">
+        <h2>Media Outlets</h2>
+        <a href="{% url 'media_outlet_create' %}" class="btn">Add New Outlet</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Score</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for outlet in outlets %}
+            <tr>
+                <td>{{ outlet.name }}</td>
+                <td>{{ outlet.score }}</td>
+                <td class="action-links">
+                    <a href="{% url 'media_outlet_detail' outlet.id %}" class="btn">View</a>
+                    <a href="{% url 'media_outlet_update' outlet.id %}" class="btn">Edit</a>
+                    <a href="{% url 'media_outlet_delete' outlet.id %}" class="btn btn-danger delete-btn">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No media outlets found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if is_paginated %}
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+            <li><a href="?page=1">&laquo; First</a></li>
+            <li><a href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <li class="active"><a href="?page={{ num }}">{{ num }}</a></li>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li><a href="?page={{ num }}">{{ num }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <li><a href="?page={{ page_obj.next_page_number }}">Next</a></li>
+            <li><a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a></li>
+        {% endif %}
+    </ul>
+    {% endif %}
+{% endblock %}

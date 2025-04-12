@@ -1,0 +1,51 @@
+{% extends "MediaApp/base.html" %}
+
+{% block title %}{{ outlet.name }}{% endblock %}
+
+{% block content %}
+    <div class="header-actions">
+        <h2>{{ outlet.name }}</h2>
+        <div>
+            <a href="{% url 'media_outlet_update' outlet.id %}" class="btn">Edit</a>
+            <a href="{% url 'media_outlet_delete' outlet.id %}" class="btn btn-danger delete-btn">Delete</a>
+        </div>
+    </div>
+
+    <div class="detail-view">
+        <p><strong>Score:</strong> {{ outlet.score }}</p>
+    </div>
+
+    <h3>Articles from this Outlet</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Shares</th>
+                <th>Views</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for article in outlet.article_set.all %}
+            <tr>
+                <td>{{ article.title }}</td>
+                <td>{{ article.shares }}</td>
+                <td>{{ article.views }}</td>
+                <td>{{ article.created_at|date:"M d, Y" }}</td>
+                <td class="action-links">
+                    <a href="{% url 'article_detail' article.id %}" class="btn">View</a>
+                    <a href="{% url 'article_update' article.id %}" class="btn">Edit</a>
+                    <a href="{% url 'article_delete' article.id %}" class="btn btn-danger delete-btn">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No articles found for this outlet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'media_outlet_list' %}" class="btn">Back to List</a>
+{% endblock %}

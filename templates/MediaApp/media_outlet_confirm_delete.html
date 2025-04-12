@@ -1,0 +1,18 @@
+{% extends "MediaApp/base.html" %}
+
+{% block title %}Delete {{ outlet.name }}{% endblock %}
+
+{% block content %}
+    <h2>Delete Media Outlet</h2>
+
+    <div class="alert alert-error">
+        <p>Are you sure you want to delete "{{ outlet.name }}"?</p>
+        <p>This will also delete all articles associated with this outlet!</p>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Confirm Delete</button>
+        <a href="{% url 'media_outlet_detail' outlet.id %}" class="btn">Cancel</a>
+    </form>
+{% endblock %}
